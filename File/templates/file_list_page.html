@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>file list</title>
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+{% for file in files %}
+    <h2>{{file.filename_text  }}</h2>
+    <p>{{file.description_text  }}</p>
+    <p>{{ file.created_date  }}</p>
+{% endfor %}
+{% endblock %}
+
+</body>
+</html>
