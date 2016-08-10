@@ -14,6 +14,7 @@ class TimeStampModel(models.Model):
 class File(TimeStampModel):
     filename_text = models.CharField(max_length=20)
     description_text = models.CharField(max_length=200)
+    file = models.FileField(upload_to="files")
 
     def __str__(self):
         return self.filename_text
