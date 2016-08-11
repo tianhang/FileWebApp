@@ -20,10 +20,10 @@
                             <tr>
                                 <td>{{ file.filename_text }}</td>
                                 <td width="20%">
-                                    <a href="#" class="glyphicon glyphicon-zoom-in" aria-hidden="true"/>
+                                    <a href="{{ file.id }}/detail/" class="glyphicon glyphicon-zoom-in" aria-hidden="true"/>
                                 </td>
                                 <td width="20%">
-                                    <a href="#" class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"/>
+                                    <a href="{{ file.id }}/delete/" class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"/>
                                 </td>
                             </tr>
                         {% endfor %}

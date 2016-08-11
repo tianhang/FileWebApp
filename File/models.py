@@ -19,6 +19,8 @@ class File(TimeStampModel):
     def __str__(self):
         return self.filename_text
 
+    def __unicode__(self):
+        return unicode(self.file)
 
 class FileAdmin(admin.ModelAdmin):
     list_display = ('filename_text','created_date')
