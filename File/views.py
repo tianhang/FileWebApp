@@ -1,10 +1,10 @@
-from django.shortcuts import render
+
 from File.models import File
 from File.forms import UploadFileForm
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.conf import settings
-
+import os
 from django.http import StreamingHttpResponse,HttpResponse
 
 
@@ -55,7 +55,7 @@ def big_file_download(request,pk):
     file = File.objects.get(id=pk)
 
     def file_iterator(file_name, chunk_size=512):
-        with open(file_name) as f:
+        with open(file_name,"rb") as f:
             while True:
                 c = f.read(chunk_size)
                 if c:
@@ -71,3 +71,8 @@ def big_file_download(request,pk):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
 
     return response
+
+def update_filename(instance, filename):
+    path = "upload/path/"
+    format = instance.userid + instance.transaction_uuid + instance.file_extension
+    return os.path.join(path, format)
