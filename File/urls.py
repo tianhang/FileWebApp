@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from File.views import filelist,upload_file
+from File.views import filelist,upload_file,filelist2
 urlpatterns = [
-    url(r'^$', filelist),
+    url(r'^$', filelist2),
     url(r'^upload$', upload_file),
     #url(r'^exit$', views.LoginOutView.as_view(), name='exit'),
     #url(r'^thanks$', views.ThanksView.as_view(), name='thanks'),
