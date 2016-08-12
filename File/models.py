@@ -13,17 +13,22 @@ class TimeStampModel(models.Model):
     class Meta:
         abstract = True
 
-def get_file_path(instance, filename):
+def get_file_path2(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join(instance.directory_string_var, filename)
+
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('files', filename)
 
 
 class File(TimeStampModel):
     filename_text = models.CharField(max_length=20)
     description_text = models.CharField(max_length=200)
-    file = models.FileField(upload_to="files")
-    #file = models.FileField(upload_to=get_file_path)
+    #file = models.FileField(upload_to="files")
+    file = models.FileField(upload_to=get_file_path)
 
     def __str__(self):
         return self.filename_text
