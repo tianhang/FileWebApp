@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib import admin
 from datetime import datetime
 
 import uuid,os
+# Receive the pre_delete signal and delete the file associated with the model instance.
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+
 
 # Create your models here.
 
@@ -35,6 +38,14 @@ class File(TimeStampModel):
 
     #def __unicode__(self):
         #return unicode(self.file)
+
+
+# receive the pre_delete signal and call the delete method on the FileField object
+@receiver(pre_delete, sender=File)
+def mymodel_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
+    instance.file.delete(False)
+
 
 class FileAdmin(admin.ModelAdmin):
     list_display = ('filename_text','created_date')

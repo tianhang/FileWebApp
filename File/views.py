@@ -4,14 +4,25 @@ from File.forms import UploadFileForm
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.conf import settings
-import os
 from django.http import StreamingHttpResponse,HttpResponse
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
 def filelist_with_form(request):
     file_list = File.objects.all()
+    paginator = Paginator(file_list, 7)  # Show 5 files per page
+    page = request.GET.get('page')
+
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        files = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        files = paginator.page(paginator.num_pages)
+
 
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -29,17 +40,19 @@ def filelist_with_form(request):
         form = UploadFileForm()
 
     #return render(request, 'upload_page.html', {'form': form})
-    return render(request,'file_list_page.html',{'files':file_list,'form': form})
+    return render(request,'file_list_page.html',{'files':files,'form': form})
 
 def delete_file(request,pk):
-    print pk
     File.objects.filter(id=pk).delete()
     return HttpResponseRedirect('/')
+
+
 
 
 def detail_file(request,pk):
     file = File.objects.get(id=pk)
     return render(request,'file_detail_page.html',{'file':file})
+
 
 def file_download(request,pk):
     file = File.objects.get(id=pk)
@@ -48,6 +61,7 @@ def file_download(request,pk):
     with open(file_path, "rb") as f:
         c = f.read()
     return HttpResponse(c)
+
 
 
 def big_file_download(request,pk):
@@ -68,11 +82,6 @@ def big_file_download(request,pk):
 
     response = StreamingHttpResponse(file_iterator(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(str(file.file))
 
     return response
-
-def update_filename(instance, filename):
-    path = "upload/path/"
-    format = instance.userid + instance.transaction_uuid + instance.file_extension
-    return os.path.join(path, format)

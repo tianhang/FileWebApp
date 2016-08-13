@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block content_tilte %}
+
+    Detail
+{% endblock %}
+
 {% block content %}
     <div class="container" style="margin-top: 50px">
 
@@ -11,7 +16,7 @@
                     <!-- Table -->
                     <table class="table">
                         <tr>
-                            <td><b>File Description :</b>{{ file.filename_text }}</td>
+                            <td><b>File Description :</b>{{ file.description_text }}</td>
                         </tr>
 
                         <tr>

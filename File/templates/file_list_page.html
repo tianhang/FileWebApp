@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% block content_tilte %}
+
+    Home
+{% endblock %}
+
 
 {% block content %}
     <div class="container" style="margin-top: 50px">
@@ -20,14 +25,38 @@
                             <tr>
                                 <td>{{ file.filename_text }}</td>
                                 <td width="20%">
-                                    <a href="{{ file.id }}/detail/" class="glyphicon glyphicon-zoom-in" aria-hidden="true"/>
+                                    <a href="{{ file.id }}/detail/" class="glyphicon glyphicon-zoom-in"
+                                       aria-hidden="true"/>
                                 </td>
                                 <td width="20%">
-                                    <a href="{{ file.id }}/delete/" class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"/>
+                                    <a href="{{ file.id }}/delete/" class="glyphicon glyphicon glyphicon-trash"
+                                       aria-hidden="true"/>
                                 </td>
                             </tr>
                         {% endfor %}
                     </table>
+                </div>
+                <div style="text-align: center">
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if files.has_previous %}
+                                <a href="?page={{ files.previous_page_number }}">
+                                    <b> <<&nbsp;&nbsp; </b>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                    page <b style="color: blue">{{ files.number }}</b> of {{ files.paginator.num_pages }}
+                            </span>
+
+                            {% if files.has_next %}
+                                <a href="?page={{ files.next_page_number }}">
+                                <b> &nbsp;&nbsp;>> </b>
+                                </a>
+                            {% endif %}
+                        </span>
+
+                    </div>
                 </div>
             </div>
 
@@ -47,7 +76,12 @@
                     </div>
                     <div class="form-group">
                         <label for="id_description_text">File desc</label>
+                        <!--
                         <input type="text" class="form-control" id="id_description_text" name="description_text">
+                        -->
+                        <textarea class="form-control" rows="3" id="id_description_text" name="description_text">
+
+                        </textarea>
                     </div>
                     <div class="form-group">
                         <label for="id_file">File input</label>
@@ -55,8 +89,9 @@
                         <p class="help-block">Example block-level help text here.</p>
                     </div>
 
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
+
 
             </div>
         </div>
