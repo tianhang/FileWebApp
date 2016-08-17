@@ -16,29 +16,20 @@ class TimeStampModel(models.Model):
     class Meta:
         abstract = True
 
-def get_file_path2(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
-    return os.path.join(instance.directory_string_var, filename)
-
+# generating unique id for each file
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join('files', filename)
 
-
+#file model
 class File(TimeStampModel):
     filename_text = models.CharField(max_length=20)
     description_text = models.CharField(max_length=200)
-    #file = models.FileField(upload_to="files")
     file = models.FileField(upload_to=get_file_path)
 
     def __str__(self):
         return self.filename_text
-
-    #def __unicode__(self):
-        #return unicode(self.file)
-
 
 # receive the pre_delete signal and call the delete method on the FileField object
 @receiver(pre_delete, sender=File)

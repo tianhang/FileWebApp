@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'FileWebAppDB',
         'USER': 'tianhang',
         'PASSWORD': 'fengsuinig',
-        'HOST': '54.169.25.144',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }

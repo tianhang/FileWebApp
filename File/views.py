@@ -8,12 +8,15 @@ from django.http import StreamingHttpResponse,HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
-
+# view for file list page
 def filelist_with_form(request):
     file_list = File.objects.all()
-    paginator = Paginator(file_list, 7)  # Show 5 files per page
+    # Show 7 files per page
+    paginator = Paginator(file_list, 7)
+    # get page ID from URL
     page = request.GET.get('page')
 
+    # pagination
     try:
         files = paginator.page(page)
     except PageNotAnInteger:
@@ -23,14 +26,13 @@ def filelist_with_form(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         files = paginator.page(paginator.num_pages)
 
-
+    # if a POST request , save the file
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = UploadFileForm(request.POST, request.FILES)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            # handle_uploaded_file(request.FILES['file'])
             form.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/')
@@ -39,33 +41,21 @@ def filelist_with_form(request):
     else:
         form = UploadFileForm()
 
-    #return render(request, 'upload_page.html', {'form': form})
     return render(request,'file_list_page.html',{'files':files,'form': form})
 
+#view for deleting files
 def delete_file(request,pk):
     File.objects.filter(id=pk).delete()
     return HttpResponseRedirect('/')
 
-
-
-
+#view for file detail page
 def detail_file(request,pk):
     file = File.objects.get(id=pk)
     return render(request,'file_detail_page.html',{'file':file})
 
-
-def file_download(request,pk):
-    file = File.objects.get(id=pk)
-    #with open("/media/"+str(file.file),"rb") as f:
-    file_path = settings.MEDIA_ROOT+"/"+str(file.file)
-    with open(file_path, "rb") as f:
-        c = f.read()
-    return HttpResponse(c)
-
-
-
+# view for downloading files
 def big_file_download(request,pk):
-    # do something...
+    # get file by id
     file = File.objects.get(id=pk)
 
     def file_iterator(file_name, chunk_size=512):
@@ -78,7 +68,6 @@ def big_file_download(request,pk):
                     break
 
     the_file_name = settings.MEDIA_ROOT+"/"+str(file.file)
-    #the_file_name = "hello.txt"
 
     response = StreamingHttpResponse(file_iterator(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
