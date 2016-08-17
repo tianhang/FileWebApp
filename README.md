@@ -8,7 +8,7 @@
 
 	sudo service docker start
 	
-	sudo ec2-user -a -G docker ec2-user
+	sudo usermod -a -G docker ec2-user
 
 
 2 install git and clone code
