@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib import admin
 from datetime import datetime
+from django.utils import timezone
 
 import uuid,os
 # Receive the pre_delete signal and delete the file associated with the model instance.
@@ -12,7 +13,8 @@ from django.dispatch.dispatcher import receiver
 # Create your models here.
 
 class TimeStampModel(models.Model):
-    created_date = models.DateTimeField(default=datetime.now, blank=True)
+    #created_date = models.DateTimeField(default=timezone.now(), blank=True)
+    created_date = models.DateTimeField(auto_now_add=True,blank=True)
     class Meta:
         abstract = True
 
